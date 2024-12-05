@@ -1,0 +1,669 @@
+<html><head><base href="https://example.com/"><!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CinePrime</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', Arial, sans-serif;
+            background: radial-gradient(circle, #141414, #0d0d0d, #000000);
+            color: #ffffff;
+            background-attachment: fixed;
+        }
+
+        body.light-mode {
+            background: radial-gradient(circle, #ffffff, #f0f0f0, #e0e0e0);
+            color: #000000;
+        }
+
+        header {
+            background-color: #ff9800;
+            padding: 10px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        header .logo svg {
+            width: 30px;
+            height: 30px;
+            fill: #ffffff;
+        }
+
+        header .logo h1 {
+            font-size: 24px;
+            color: #ffffff;
+            font-weight: 700;
+        }
+
+        header .menu {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        header .menu a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 16px;
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+
+        header .menu a:hover {
+            color: #0d0d0d;
+        }
+
+        .carousel {
+            position: relative;
+            width: 100%;
+            max-width: 100%;
+            overflow: hidden;
+            margin: 20px auto;
+        }
+
+        .carousel-track {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+        }
+
+        .carousel-item {
+            min-width: 100%;
+            height: 400px;
+            position: relative;
+        }
+
+        .carousel-item:hover .item-info {
+            opacity: 1;
+        }
+
+        .carousel-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .item-info {
+            position: absolute;
+            bottom: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .carousel-buttons {
+            position: absolute;
+            top: 50%;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            transform: translateY(-50%);
+        }
+
+        .carousel-buttons button {
+            background-color: rgba(0, 0, 0, 0.5);
+            border: none;
+            color: #ffffff;
+            font-size: 24px;
+            cursor: pointer;
+            padding: 10px;
+        }
+
+        .carousel-buttons button:hover {
+            background-color: #ff9800;
+        }
+
+        .search-bar-prominent {
+            margin: 20px auto;
+            width: 500px;
+        }
+
+        .search-bar-prominent input {
+            width: 100%;
+            padding: 10px 15px;
+            font-size: 18px;
+            border: 1px solid #ff9800;
+            border-radius: 25px;
+            outline: none;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+
+        .search-bar-prominent input::placeholder {
+            color: #ccc;
+        }
+
+        main {
+            display: flex;
+            padding: 20px;
+            gap: 20px;
+        }
+
+        nav {
+            width: 20%;
+            background: linear-gradient(145deg, #1e1e1e, #222);
+            border-radius: 8px;
+            padding: 10px;
+            box-shadow: inset 0px 2px 5px rgba(0, 0, 0, 0.5);
+        }
+
+        nav h2 {
+            font-size: 20px;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        nav ul {
+            list-style-type: none;
+        }
+
+        nav ul li {
+            margin: 10px 0;
+        }
+
+        nav ul li a {
+            text-decoration: none;
+            color: #ffffff;
+            font-size: 18px;
+        }
+
+        nav ul li a:hover {
+            color: #ff9800;
+        }
+
+        section {
+            flex: 1;
+            background: linear-gradient(to bottom, #222, #2b2b2b);
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .movies-grid, .releases-row, .popular-row, .recommendation-row {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+        }
+
+        .movies-grid::-webkit-scrollbar,
+        .releases-row::-webkit-scrollbar,
+        .popular-row::-webkit-scrollbar,
+        .recommendation-row::-webkit-scrollbar {
+            height: 8px;
+        }
+
+        .movies-grid::-webkit-scrollbar-thumb,
+        .releases-row::-webkit-scrollbar-thumb,
+        .popular-row::-webkit-scrollbar-thumb,
+        .recommendation-row::-webkit-scrollbar-thumb {
+            background: #555;
+            border-radius: 4px;
+        }
+
+        .movies-grid::-webkit-scrollbar-thumb:hover,
+        .releases-row::-webkit-scrollbar-thumb:hover,
+        .popular-row::-webkit-scrollbar-thumb:hover,
+        .recommendation-row::-webkit-scrollbar-thumb:hover {
+            background: #ff9800;
+        }
+
+        .movie-card, .release-card, .popular-card, .recommendation-card {
+            position: relative;
+            width: 200px;
+            background: linear-gradient(to bottom, #333, #444);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            text-align: center;
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .movie-card:hover, .release-card:hover, .popular-card:hover, .recommendation-card:hover {
+            transform: scale(1.05);
+            box-shadow: 0px 4px 15px rgba(255, 152, 0, 0.6);
+        }
+
+        .movie-card img, .release-card img, .popular-card img, .recommendation-card img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+
+        .movie-info {
+            padding: 10px;
+            font-size: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .movie-info h4 {
+            font-size: 18px;
+            font-weight: 700;
+            margin: 5px 0;
+            color: #fff;
+        }
+
+        .movie-info p {
+            font-size: 14px;
+            margin: 0;
+            color: #ccc;
+        }
+
+        .movie-info .rating {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 2px;
+        }
+
+        .movie-info .rating i {
+            color: #ff9800;
+            font-size: 16px;
+        }
+
+        .movie-buttons {
+            margin-top: auto;
+        }
+
+        .movie-buttons button {
+            margin: 5px;
+            padding: 5px 10px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            background-color: #ff9800;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .movie-buttons button:hover {
+            background-color: #ff7700;
+        }
+
+        footer {
+            background: linear-gradient(to right, #111, #1b1b1b);
+            padding: 15px;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 16px;
+            color: #ffffff;
+        }
+
+        footer a {
+            text-decoration: none;
+            color: #ff9800;
+        }
+
+        #movie-detail-page {
+            display: none;
+        }
+
+        .movie-detail-container {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+            color: white;
+        }
+
+        .movie-detail-container img {
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 12px;
+        }
+
+        .video-player {
+            max-width: 800px;
+            margin: 20px auto;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            background-color: #222;
+            border-radius: 10px;
+            padding: 20px;
+        }
+
+        .video-player iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+
+        .mode-toggle {
+            cursor: pointer;
+            padding: 10px;
+            background-color: #ff9800;
+            border: none;
+            border-radius: 5px;
+            color: white;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <path d="M12 0C5.372 0 0 5.372 0 12s5.372 12 12 12 12-5.372 12-12S18.628 0 12 0zm5.857 17.143H6.143V6.857h11.714v10.286z"/>
+            </svg>
+            <h1>CinePrime</h1>
+        </div>
+        <div class="menu">
+            <a href="https://example.com">Inicio</a>
+            <a href="https://example.com">Géneros</a>
+            <a href="https://example.com">Series</a>
+            <a href="https://example.com">Películas</a>
+            <a href="https://example.com">Estrenos</a>
+            <a href="https://example.com">Contacto</a>
+            <button id="mode-toggle" class="mode-toggle">🌙 Modo Oscuro</button>
+        </div>
+    </header>
+    <div class="carousel">
+        <div class="carousel-track">
+            <div class="carousel-item">
+                <img src="https://via.placeholder.com/800x400" alt="Poster de Película 1">
+                <div class="item-info">
+                    <h3>Película 1</h3>
+                    <p>Una emocionante película sobre aventuras y descubrimientos.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://via.placeholder.com/800x400" alt="Poster de Película 2">
+                <div class="item-info">
+                    <h3>Película 2</h3>
+                    <p>Un intenso thriller lleno de giros inesperados.</p>
+                </div>
+            </div>
+            <div class="carousel-item">
+                <img src="https://via.placeholder.com/800x400" alt="Poster de Película 3">
+                <div class="item-info">
+                    <h3>Película 3</h3>
+                    <p>Una conmovedora historia sobre superación personal.</p>
+                </div>
+            </div>
+        </div>
+        <div class="carousel-buttons">
+            <button class="prev">&lt;</button>
+            <button class="next">&gt;</button>
+        </div>
+    </div>
+    <div class="search-bar-prominent">
+        <input type="text" placeholder="Buscar películas o series">
+    </div>
+    <main>
+        <nav>
+            <h2>Géneros</h2>
+            <ul>
+                <li><a href="https://example.com">Acción</a></li>
+                <li><a href="https://example.com">Comedia</a></li>
+                <li><a href="https://example.com">Drama</a></li>
+                <li><a href="https://example.com">Terror</a></li>
+                <li><a href="https://example.com">Ciencia Ficción</a></li>
+            </ul>
+        </nav>
+        <section>
+            <h2>Películas Destacadas</h2>
+            <div class="movies-grid">
+                <!-- Movie cards will be populated here -->
+            </div>
+        </section>
+        <section class="releases-section">
+            <h2 class="releases-title">Estrenos de la Semana</h2>
+            <div class="releases-row">
+                <!-- Release cards will be populated here -->
+            </div>
+        </section>
+        <section class="popular-section">
+            <h2 class="popular-title">Películas Más Populares</h2>
+            <div class="popular-row">
+                <!-- Popular cards will be populated here -->
+            </div>
+        </section>
+        <section class="recommendation-section">
+            <h2 class="recommendation-title">Recomendaciones basadas en tus gustos</h2>
+            <div class="recommendation-row">
+                <!-- Recommendations will be populated here -->
+            </div>
+        </section>
+    </main>
+    <div class="video-player" id="video-player">
+        <iframe src="https://www.youtube.com/embed/tgbNymZ7vqY" frameborder="0" allowfullscreen></iframe>
+    </div>
+    <div id="movie-detail-page">
+        <div style="text-align: center; padding: 20px;">
+            <button id="back-button" style="background-color: #ff9800; color: #fff; border: none; padding: 10px 15px; border-radius: 5px; cursor: pointer; font-size: 16px;">← Volver</button>
+        </div>
+        <div class="movie-detail-container">
+            <img id="detail-poster" src="" alt="Poster Grande">
+            <h1 id="detail-title" style="font-size: 32px; margin: 20px 0;">Título de la Película</h1>
+            <p id="detail-synopsis" style="font-size: 18px; line-height: 1.6;">Sinopsis detallada de la película.</p>
+            <div style="margin: 20px 0;">
+                <h3 style="font-size: 24px; margin-bottom: 10px;">Géneros</h3>
+                <p id="detail-genres" style="font-size: 18px;">Acción, Ciencia Ficción</p>
+            </div>
+            <div style="margin: 20px 0;">
+                <h3 style="font-size: 24px; margin-bottom: 10px;">Elenco Principal</h3>
+                <p id="detail-cast" style="font-size: 18px;">Actor 1, Actor 2, Actor 3, Actor 4</p>
+            </div>
+            <div style="margin: 20px 0;">
+                <h3 style="font-size: 24px; margin-bottom: 10px;">Opciones de Reproducción</h3>
+                <div>
+                    <button style="background-color: #ff9800; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;">Ver en HD</button>
+                    <button style="background-color: #ff7700; color: #fff; border: none; padding: 10px 20px; border-radius: 5px; cursor: pointer; font-size: 16px; margin: 5px;" onclick="toggleVideoPlayer()">Descargar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <div style="margin-bottom: 10px;">
+            <a href="https://example.com" style="margin-right: 15px; text-decoration: none; color: #ff9800;">Política de Privacidad</a>
+            <a href="https://example.com" style="margin-right: 15px; text-decoration: none; color: #ff9800;">Términos y Condiciones</a>
+            <a href="https://example.com" style="margin-right: 15px; text-decoration: none; color: #ff9800;">Ayuda</a>
+        </div>
+        <div>
+            <a href="https://facebook.com" target="_blank" style="text-decoration: none; margin: 0 10px; color: #ffffff;">
+                <i class="fab fa-facebook-square" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://twitter.com" target="_blank" style="text-decoration: none; margin: 0 10px; color: #ffffff;">
+                <i class="fab fa-twitter" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://instagram.com" target="_blank" style="text-decoration: none; margin: 0 10px; color: #ffffff;">
+                <i class="fab fa-instagram" style="font-size: 24px;"></i>
+            </a>
+            <a href="https://youtube.com" target="_blank" style="text-decoration: none; margin: 0 10px; color: #ffffff;">
+                <i class="fab fa-youtube" style="font-size: 24px;"></i>
+            </a>
+        </div>
+        <p style="margin-top: 15px;">&copy; 2023 CinePrime. Todos los derechos reservados.</p>
+    </footer>
+    <script>
+        const track = document.querySelector('.carousel-track');
+        const items = document.querySelectorAll('.carousel-item');
+        const nextButton = document.querySelector('.next');
+        const prevButton = document.querySelector('.prev');
+        let index = 0;
+
+        function moveCarousel() {
+            track.style.transform = `translateX(-${index * 100}%)`;
+        }
+
+        nextButton.addEventListener('click', () => {
+            index = (index + 1) % items.length;
+            moveCarousel();
+        });
+
+        prevButton.addEventListener('click', () => {
+            index = (index - 1 + items.length) % items.length;
+            moveCarousel();
+        });
+
+        const movieDetails = {
+            "Película 1": {
+                img: "https://via.placeholder.com/800x400",
+                synopsis: "Una emocionante película sobre aventuras y descubrimientos.",
+                genres: "Aventura, Acción",
+                cast: "Actor 1, Actor 2, Actor 3, Actor 4",
+            },
+            "Película 2": {
+                img: "https://via.placeholder.com/800x400",
+                synopsis: "Un intenso thriller lleno de giros inesperados.",
+                genres: "Thriller, Drama",
+                cast: "Actor 5, Actor 6, Actor 7, Actor 8",
+            },
+            "Película 3": {
+                img: "https://via.placeholder.com/800x400",
+                synopsis: "Una conmovedora historia sobre superación personal.",
+                genres: "Drama, Biografía",
+                cast: "Actor 9, Actor 10, Actor 11, Actor 12",
+            },
+        };
+
+        const movieDetailPage = document.getElementById('movie-detail-page');
+        const mainContent = document.querySelector('main');
+        const header = document.querySelector('header');
+        const footer = document.querySelector('footer');
+        const backButton = document.getElementById('back-button');
+
+        backButton.addEventListener('click', () => {
+            movieDetailPage.style.display = 'none';
+            mainContent.style.display = 'block';
+            header.style.display = 'block';
+            footer.style.display = 'block';
+            document.getElementById('video-player').style.display = 'none';
+        });
+
+        function showMovieDetails(movieTitle) {
+            const details = movieDetails[movieTitle];
+
+            if (!details) return;
+
+            document.getElementById('detail-poster').src = details.img;
+            document.getElementById('detail-title').textContent = movieTitle;
+            document.getElementById('detail-synopsis').textContent = details.synopsis;
+            document.getElementById('detail-genres').textContent = details.genres;
+            document.getElementById('detail-cast').textContent = details.cast;
+
+            movieDetailPage.style.display = 'block';
+            mainContent.style.display = 'none';
+            header.style.display = 'none';
+            footer.style.display = 'none';
+        }
+
+        document.querySelectorAll('.movie-buttons button:nth-child(2)').forEach(button => {
+            button.addEventListener('click', (e) => {
+                const movieCard = e.target.closest('.movie-card');
+                const movieTitle = movieCard.querySelector('h4').textContent;
+                showMovieDetails(movieTitle);
+            });
+        });
+
+        const movieSections = [
+            {
+                container: document.querySelector('.movies-grid'),
+                movies: [
+                    { title: "Película 1", year: "2023", img: "https://via.placeholder.com/150x220", rating: 4.5 },
+                    { title: "Película 2", year: "2022", img: "https://via.placeholder.com/150x220", rating: 4 },
+                    { title: "Película 3", year: "2021", img: "https://via.placeholder.com/150x220", rating: 5 },
+                ]
+            },
+            {
+                container: document.querySelector('.releases-row'),
+                movies: [
+                    { title: "Estreno 1", year: "2023", img: "https://via.placeholder.com/150x220", rating: 5 },
+                    { title: "Estreno 2", year: "2023", img: "https://via.placeholder.com/150x220", rating: 4.2 },
+                    { title: "Estreno 3", year: "2023", img: "https://via.placeholder.com/150x220", rating: 3.8 },
+                ]
+            },
+            {
+                container: document.querySelector('.popular-row'),
+                movies: [
+                    { title: "Popular 1", year: "2023", img: "https://via.placeholder.com/150x220", rating: 4.8 },
+                    { title: "Popular 2", year: "2020", img: "https://via.placeholder.com/150x220", rating: 4.6 },
+                    { title: "Popular 3", year: "2019", img: "https://via.placeholder.com/150x220", rating: 4.9 },
+                ]
+            },
+            {
+                container: document.querySelector('.recommendation-row'),
+                movies: [
+                    { title: "Recomendación 1", year: "2023", img: "https://via.placeholder.com/150x220", rating: 5 },
+                    { title: "Recomendación 2", year: "2021", img: "https://via.placeholder.com/150x220", rating: 4.7 },
+                    { title: "Recomendación 3", year: "2018", img: "https://via.placeholder.com/150x220", rating: 4.3 },
+                ]
+            }
+        ];
+
+        movieSections.forEach(section => {
+            section.container.innerHTML = '';
+            section.movies.forEach(movie => {
+                const movieCard = document.createElement('div');
+                movieCard.className = "movie-card";
+                movieCard.innerHTML = `
+                    <img src="${movie.img}" alt="${movie.title}">
+                    <div class="movie-info">
+                        <h4>${movie.title}</h4>
+                        <p>${movie.year}</p>
+                        <div class="rating">${generateStars(movie.rating)}</div>
+                    </div>
+                    <div class="movie-buttons">
+                        <button>Ver ahora</button>
+                        <button>Más detalles</button>
+                    </div>
+                `;
+                section.container.appendChild(movieCard);
+            });
+        });
+
+        function generateStars(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                stars += `<i class="fas fa-star${i <= rating ? '' : '-half-alt'}"></i>`;
+            }
+            return stars;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const modeToggle = document.getElementById('mode-toggle');
+            modeToggle.addEventListener('click', () => {
+                document.body.classList.toggle('light-mode');
+                modeToggle.textContent =
+                    document.body.classList.contains('light-mode') ? '🌙 Modo Oscuro' : '☀️ Modo Claro';
+            });
+        });
+
+        function toggleVideoPlayer() {
+            const videoPlayer = document.getElementById('video-player');
+            videoPlayer.style.display = videoPlayer.style.display === 'flex' ? 'none' : 'flex';
+        }
+    </script>
+</body>
+</html>
